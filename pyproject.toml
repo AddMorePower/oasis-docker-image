@@ -57,7 +57,7 @@ dev = ["nomad-lab[parsing, infrastructure, dev]>=1.3.4"]
 extra-index-url = [
   "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple",
 ]
-constraint-dependencies = ["hyperspy>=1.7.6"]
+constraint-dependencies = ["hyperspy>=1.7.6", "pillow>=10"]
 prerelease = "disallow"
 
 [tool.setuptools.packages.find]
