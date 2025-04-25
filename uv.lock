@@ -3500,15 +3500,15 @@ wheels = [
 
 [[package]]
 name = "nomad-normalizer-plugin-simulation-workflow"
-version = "1.0"
+version = "1.0.3"
 source = { registry = "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple" }
 dependencies = [
     { name = "nomad-lab" },
     { name = "nomad-schema-plugin-simulation-workflow" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/39/47/c3896d87e04285fd4482e607043bedce4bfe051ea380fec156aa36b8fb1c/nomad_normalizer_plugin_simulation_workflow-1.0.tar.gz", hash = "sha256:7472e63c9abbc64b0281c68c9122e561390d14fc070c859328fd95b9fdb9fdcf", size = 7442 }
+sdist = { url = "https://files.pythonhosted.org/packages/ee/c6/6dce5a3c8673416dfdd603a76dad60125be499991000a2cdf8d475a05aa0/nomad_normalizer_plugin_simulation_workflow-1.0.3.tar.gz", hash = "sha256:c9b3cc7d297e116d1e235086543f1e92c9b7154ab8662efb105204f9a7a3520b", size = 102414 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/91/9a/edf7ca75a9b40f81902f3d9358c8174dbd5125b2317b8899920c25b182c7/nomad_normalizer_plugin_simulation_workflow-1.0-py3-none-any.whl", hash = "sha256:a210812c7f091051c053ea9eaf03b691cfc4f865c4a3850a794fd2f48ff2256e", size = 8153 },
+    { url = "https://files.pythonhosted.org/packages/cf/65/c60c11a563a658e58fb68360e41e26d2840ba24cdffa375528207410de6d/nomad_normalizer_plugin_simulation_workflow-1.0.3-py3-none-any.whl", hash = "sha256:1e1d9dd86feb8e7617c18c6a7b6ae33ab95bc3374cbbf3c154aa34ed45bfbffd", size = 8595 },
 ]
 
 [[package]]
