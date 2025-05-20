@@ -29,7 +29,7 @@ repository = "https://github.com/FAIRmat-NFDI/nomad-distro-template"
 [project.optional-dependencies]
 plugins = [
   "nomad-damask-parser @ git+https://github.com/AddMorePower/nomad-DAMASK_parser.git@v0.1.0",
-  "nomad-sxdm-parser @ git+https://github.com/AddMorePower/nomad-SXDM_parser.git@v0.1.0",
+  "nomad-sxdm-parser @ git+https://github.com/AddMorePower/nomad-SXDM_parser.git@v0.2.0",
   "nomad-txrm-parser @ git+https://github.com/AddMorePower/nomad-TXRM_parser.git@v0.1.0",
   "nomad-ebsd-parser @ git+https://github.com/AddMorePower/nomad-EBSD_parser.git@v0.1.0",
   "perovskite-solar-cell-database @ git+https://github.com/FAIRmat-NFDI/nomad-perovskite-solar-cells-database.git@v0.1.1",
