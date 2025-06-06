@@ -1,21 +1,9 @@
-![docker image](https://github.com/FAIRmat-NFDI/nomad-distro-template/actions/workflows/docker-publish.yml/badge.svg)
+![docker image](https://github.com/AddMorePower/oasis-docker-image/actions/workflows/docker-publish.yml/badge.svg)
 
-# NOMAD Oasis Distribution *Template*
-This repository is a template for creating your own custom NOMAD Oasis distribution image.
-Click [here](https://github.com/new?template_name=nomad-distro-template&template_owner=FAIRmat-NFDI)
-to use this template, or click the `Use this template` button in the upper right corner of
-the main GitHub page for this template.
 
-> [!IMPORTANT]
-> The templated repository will run a GitHub action on creation which might take a few minutes.
-> After the workflow finishes you should refresh the page and this message should disappear.
-> If this message persists you might need to trigger the workflow manually by navigating to the
-> "Actions" tab at the top, clicking "Template Repository Initialization" on the left side,
-> and triggering it by clicking "Run workflow" under the "Run workflow" button on the right.
+# AddMorePower's NOMAD Oasis Distribution
 
-# FAIRmat-NFDI's NOMAD Oasis Distribution
-
-This is the NOMAD Oasis distribution of FAIRmat-NFDI.
+This is the NOMAD Oasis distribution of AddMorePower.
 Below are instructions for how to [deploy this distribution](#deploying-the-distribution)
 and how to customize it through [adding plugins](#adding-a-plugin).
 
@@ -56,16 +44,16 @@ Below are instructions for how to deploy this NOMAD Oasis distribution
 2. Clone the repository or download the repository as a zip file.
 
     ```sh
-    git clone https://github.com/FAIRmat-NFDI/nomad-distro-template.git
-    cd nomad-distro-template
+    git clone https://github.com/AddMorePower/oasis-docker-image.git
+    cd oasis-docker-image
     ```
 
     or
 
     ```sh
-    curl-L -o nomad-distro-template.zip "https://github.com/FAIRmat-NFDI/nomad-distro-template/archive/main.zip"
-    unzip nomad-distro-template.zip
-    cd nomad-distro-template
+    curl-L -o oasis-docker-image.zip "https://github.com/AddMorePower/oasis-docker-image/archive/main.zip"
+    unzip oasis-docker-image.zip
+    cd oasis-docker-image
     ```
 
 3. _On Linux only,_ recursively change the owner of the `.volumes` directory to the nomad user (1000)
@@ -82,34 +70,42 @@ Below are instructions for how to deploy this NOMAD Oasis distribution
     docker compose pull
     ```
 
-5. (Optional) Deploy Oasis with HTTPS
+5. Configuring Secure HTTP and HTTPS Connections
 
-    Generate a self-signed SSL certificate (or use a trusted certificate authority if preferred):
-    ```sh
-    mkdir ssl
-    openssl req -x509 -nodes -days 365 \
-      -newkey rsa:2048 \
-      -keyout ./ssl/selfsigned.key \
-      -out ./ssl/selfsigned.crt \
-      -subj "/CN=localhost"
-    ```
+   By default `docker-compose.yaml` uses the HTTP protocol for communication. This works for testing, but before entering production you must secure your setup with HTTPS; otherwise, any communication with the server —including credentials and sensitive data— can be compromised.
 
-    Update the `proxy` config in `docker-compose.yml` to use the HTTPS Nginx config instead of the HTTP one:
-    ```diff
-    - # HTTP
-    - - ./configs/nginx_http.conf:/etc/nginx/conf.d/default.conf:ro
+   HTTPS requires a TLS certificate, which must be renewed periodically. Depending on your setup, you have several options:
 
-    + # HTTPS (you need to generate SSL certificate)
-    + - ./configs/nginx_https.conf:/etc/nginx/conf.d/default.conf:ro
-    + - ./ssl:/etc/nginx/ssl:ro  # generate your SSL certificate
-    ```
+   1. You already have a certificate.
 
-    Also make sure port 443 is exposed:
-    ```yaml
-    ports:
-      - 80:80
-      - 443:443
-    ```
+      In this case, you just need the certificate and key files.
+
+   2. Free certificate from Let's Encrypt
+
+      [Let's Encrypt](https://letsencrypt.org/) provides free TLS certificates for those with a domain name. Follow their tutorials for instructions on generating a certificate.
+
+   3. Self-signed certificate
+
+      For testing, you can create a [self-signed certificate](https://en.wikipedia.org/wiki/Self-signed_certificate). Note that self-signed certificates are not recommended for production since they are not trusted by browsers. You can generate one with:
+
+      ```sh
+      mkdir ssl
+      openssl req -x509 -nodes -days 365 \
+        -newkey rsa:2048 \
+        -keyout ./ssl/selfsigned.key \
+        -out ./ssl/selfsigned.crt \
+        -subj "/CN=localhost"
+      ```
+
+   To start using a TLS certificate, update the `proxy` configuration in `docker-compose.yml`:
+   ```diff
+   - # HTTP
+   - - ./configs/nginx_http.conf:/etc/nginx/conf.d/default.conf:ro
+
+   + # HTTPS
+   + - ./configs/nginx_https.conf:/etc/nginx/conf.d/default.conf:ro
+   + - ./ssl:/etc/nginx/ssl:ro  # Your certificate files
+   ```
 
 6. And run it with docker compose in detached (--detach or -d) mode
 
@@ -123,7 +119,7 @@ Below are instructions for how to deploy this NOMAD Oasis distribution
     # HTTP
     curl localhost/nomad-oasis/alive
 
-    # HTTPS with self-signed SSL certificate (and trust self-signed certificate)
+    # HTTPS (--insecure flag is only needed for a self-signed certificate)
     curl --insecure https://localhost/nomad-oasis/alive
     ```
 
@@ -131,7 +127,7 @@ Below are instructions for how to deploy this NOMAD Oasis distribution
 
 #### Updating the image
 Any pushes to the main branch of this repository, such as when [adding a plugin](#adding-a-plugin), will trigger a pipeline that generates a new app and jupyter image.
-   
+
 1. To update your local image you need to shut down NOMAD using
 
     ```sh
@@ -162,7 +158,7 @@ You can find more details on setting up and maintaining an Oasis in the NOMAD do
 ### For an existing Oasis
 
 If you already have an Oasis running you only need to change the image being pulled in
-your `docker-compose.yaml` with `ghcr.io/fairmat-nfdi/nomad-distro-template:main` for the services
+your `docker-compose.yaml` with `ghcr.io/addmorepower/oasis-docker-image:main` for the services
 `worker`, `app`, `north`, and `logtransfer`.
 
 If you want to use the `nomad.yaml` from this repository you also need to comment out
@@ -224,10 +220,17 @@ be generated.
 In addition to the Docker image for running the oasis, this repository also builds a custom NORTH image for running a jupyter hub with the installed plugins.
 This image has been added to the [`configs/nomad.yaml`](configs/nomad.yaml) during the initialization of this repository and should therefore already be available in your Oasis under "Analyze / NOMAD Remote Tools Hub / jupyter"
 
+We currently use `quay.io/jupyter/base-notebook:2025-04-14` as our base image for Jupyter. While it includes the necessary Python packages, it does not come with `R` or `Julia` pre-installed.
+If you need support for those languages, you can switch to `quay.io/jupyter/datascience-notebook:2025-04-04`, which includes both `R` and `Julia`.
+The Jupyter image does not include `gcc` or `build-essential` by default. If you want to allow users to install Python packages that require compilation while running a notebook, you'll need to install these tools in the [Dockerfile](./Dockerfile#L172) or switch the base image to `quay.io/jupyter/datascience-notebook:2025-04-04`.
+However, including these packages can increase the image size and may introduce security risks if arbitrary code is compiled at runtime.
+
+Note that the `base-notebook` image is more lightweight and uses less disk space compared to the `datascience-notebook` image.
+
 The image is quite large and might cause a timeout the first time it is run. In order to avoid this you can pre pull the image with:
 
 ```sh
-docker pull ghcr.io/fairmat-nfdi/nomad-distro-template/jupyter:main
+docker pull ghcr.io/addmorepower/oasis-docker-image/jupyter:main
 ```
 
 If you want additional python packages to be available to all users in the jupyter hub you can add those to the jupyter table in the [`pyproject.toml`](pyproject.toml):
@@ -251,7 +254,7 @@ In addition to unit tests, the pipeline also verifies that all example uploads c
 
 For example upload tests, the CI uses the image built in the Build Image step. It then runs the Docker container and starts up the application to confirm that it functions correctly. This approach ensures that if the pipeline passes, the app is more likely to run smoothly in a Dockerized environment on a server, not just locally.
 
-If you need to disable tests for specific plugins, update the **PLUGIN_TESTS_PLUGINS_TO_SKIP** variable in [.github/workflows/docker-publish.yml](./.github/workflows/docker-publish.yml#L19) by adding the plugin names to the existing list.
+If you need to disable tests for specific plugins, update the **PLUGIN_TESTS_PLUGINS_TO_SKIP** variable in [.github/workflows/docker-publish.yml](./.github/workflows/docker-publish.yml#L21) by adding the plugin names to the existing list.
 
 ## Set Up Regular Package Updates with Dependabot
 
@@ -260,6 +263,16 @@ Dependabot is already configured in the repository’s CI setup, but you need to
 To enable Dependabot, go to Settings > Code security and analysis in your GitHub repository. From there, turn on Dependabot alerts and version updates. Once enabled, Dependabot will automatically check for dependency updates and create pull requests when new versions are available.
 
 This automated process helps ensure that your dependencies stay up to date, improving security and reducing the risk of vulnerabilities.
+
+## Customizing Documentation
+
+By default, documentation is built using the [nomad-docs](https://github.com/AddMorePower/nomad-docs) repository. However, if you'd like to customize the documentation for your Oasis instance, you can easily do so.
+
+1. First, [fork the nomad-docs repository](https://github.com/AddMorePower/nomad-docs/fork).
+2. Make your desired changes in your fork.
+3. Update the `NOMAD_DOCS_REPO` variable in the [.github/workflows/docker-publish.yml](./.github/workflows/docker-publish.yml#L19) file to point to the URL of your forked repository.
+
+This setup ensures that your custom documentation is used when building your Oasis.
 
 ## Updating the distribution from the template
 
@@ -278,6 +291,12 @@ git checkout --theirs Dockerfile
 git checkout --theirs .github/workflows/docker-publish.yml
 ```
 
+The lock file merge conflicts can be resolved to use your versions instead of the template repository resolution.
+```sh
+git checkout --ours uv.lock
+```
+
+
 For detailed instructions on how to resolve the merge conflicts between different version we refer you to the latest template release [notes](https://github.com/FAIRmat-NFDI/nomad-distro-template/releases/latest)
 
 Once the merge conflicts are resolved you should add the changes and commit them
@@ -291,7 +310,7 @@ Ideally all workflows should be triggered automatically but you might need to ru
 
 ## FAQ/Trouble shooting
 
-_I get an_ `Error response from daemon: Head "https://ghcr.io/v2/FAIRmat-NFDI/nomad-distro-template/manifests/main": unauthorized`
+_I get an_ `Error response from daemon: Head "https://ghcr.io/v2/AddMorePower/oasis-docker-image/manifests/main": unauthorized`
 _when trying to pull my docker image._
 
 Most likely you have not made the package public or provided a personal access token (PAT).
