@@ -24,11 +24,12 @@ and how to customize it through [adding plugins](#adding-a-plugin).
 In this README you will find instructions for:
 1. [Deploying the distribution](#deploying-the-distribution)
 2. [Adding a plugin](#adding-a-plugin)
-3. [Using the jupyter image](#the-jupyter-image)
-4. [Automated unit and example upload tests in CI](#automated-unit-and-example-upload-tests-in-ci)
-5. [Setup regular package updates with Dependabot](#set-up-regular-package-updates-with-dependabot)
-6. [Updating the distribution from the template](#updating-the-distribution-from-the-template)
-7. [Solving common issues](#faqtrouble-shooting)
+3. [Integrate the updates of custom AMP plugins](#integrate-the-updates-of-custom-amp-plugins)
+4. [Using the jupyter image](#the-jupyter-image)
+5. [Automated unit and example upload tests in CI](#automated-unit-and-example-upload-tests-in-ci)
+6. [Setup regular package updates with Dependabot](#set-up-regular-package-updates-with-dependabot)
+7. [Updating the distribution from the template](#updating-the-distribution-from-the-template)
+8. [Solving common issues](#faqtrouble-shooting)
 
 ## Deploying the distribution
 
@@ -214,6 +215,19 @@ plugins = [
 
 Once the changes have been committed to the main branch, the new image will automatically
 be generated.
+
+## Integrate the updates of custom AMP plugins
+
+When any modification is made to an AMP plugin, the Docker image of the Oasis have to be regenerated to include the modifications.
+To do this:
+- Go to the repository of the plugin that has been modified and create a new tag version
+- Then, in this repository, update the `pyproject.toml` file with the tag version you just created on the plugin repository
+- Commit this change and the CI should produce automatically a new Docker image with the modifications integrated.
+
+Be aware that the generation of a new Docker image can be a rather long process ~10-20 minutes.
+
+As mentioned in the previous section, always use a commit has or a tag version when importing a plugin from a repo.
+If you only mention the link of the repository of the plugin, it might work but then manually triggering the creation of a new Docker image might not take the last state of the repository for the plugin mentioned.
 
 ## The Jupyter image
 
