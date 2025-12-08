@@ -3332,7 +3332,7 @@ requires-dist = [
     { name = "nomad-schema-plugin-simulation-workflow", marker = "extra == 'plugins'", specifier = ">=1.0.1" },
     { name = "nomad-simulations", marker = "extra == 'plugins'", specifier = "==0.4.0" },
     { name = "nomad-sxdm-parser", marker = "extra == 'plugins'", git = "https://github.com/AddMorePower/nomad-SXDM_parser.git?rev=v0.2.0" },
-    { name = "nomad-txrm-parser", marker = "extra == 'plugins'", git = "https://github.com/AddMorePower/nomad-TXRM_parser.git?rev=v0.2.0" },
+    { name = "nomad-txrm-parser", marker = "extra == 'plugins'", git = "https://github.com/AddMorePower/nomad-TXRM_parser.git?rev=v0.3.0" },
     { name = "perovskite-solar-cell-database", marker = "extra == 'plugins'", git = "https://github.com/FAIRmat-NFDI/nomad-perovskite-solar-cells-database.git?rev=v0.1.1" },
     { name = "pynxtools", extras = ["convert"], marker = "extra == 'plugins'", specifier = "==0.10.4" },
     { name = "setuptools" },
@@ -3713,7 +3713,7 @@ dependencies = [
 [[package]]
 name = "nomad-txrm-parser"
 version = "0.1.0"
-source = { git = "https://github.com/AddMorePower/nomad-TXRM_parser.git?rev=v0.2.0#bbb8ff72590d731a3c86661b75a2a7aa17bd8663" }
+source = { git = "https://github.com/AddMorePower/nomad-TXRM_parser.git?rev=v0.3.0#4528616902be0a6cd09cdb4e478af7ca3c45ebf9" }
 dependencies = [
     { name = "nomad-lab" },
     { name = "python-magic-bin", marker = "sys_platform == 'win32'" },
